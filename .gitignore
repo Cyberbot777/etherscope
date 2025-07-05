@@ -1,0 +1,35 @@
+# Node / Backend
+backend/node_modules/
+backend/.env
+
+# Frontend (Vite / React)
+frontend/node_modules/
+frontend/.env
+
+# Solidity
+contracts/artifacts/
+contracts/cache/
+contracts/node_modules/
+
+# General
+.env
+.DS_Store
+docker/.env
+
+
+# Node modules (global safety net)
+node_modules/
+package-lock.json
+package.json
+
+# Ignore IDE junk
+.vscode/
+.DS_Store
+
+# Contracts compiled files
+contracts/artifacts/
+contracts/cache/
+contracts/node_modules/
+
+# dotenv secrets
+.env

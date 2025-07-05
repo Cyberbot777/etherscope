@@ -1,0 +1,21 @@
+# Node modules (don't commit these)
+node_modules/
+
+# Environment variables & secrets
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker stuff (optional but smart)
+docker-compose.override.yml
+docker/.env
+
+# Coverage reports (if you use testing later)
+coverage/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
