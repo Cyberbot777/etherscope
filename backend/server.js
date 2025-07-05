@@ -20,6 +20,18 @@ app.get('/api/block', async (req, res) => {
   }
 });
 
+app.get('/api/block/:number', async (req, res) => {
+  try {
+    const blockNumber = parseInt(req.params.number);
+    const block = await provider.getBlock(blockNumber);
+    res.json(block);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch block' });
+  }
+});
+
+
 app.listen(PORT, () => {
   console.log(`Backend API running at http://localhost:${PORT}`);
 });
