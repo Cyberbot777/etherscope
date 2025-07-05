@@ -71,7 +71,8 @@ npx hardhat test
 
 Example smart contract test result (DepositWallet contract on local Ganache network):
 
-![Smart Contract Test Screenshot](docs/successful-test.png)
+![Smart Contract Test Screenshot](docs/successfull-test.png)
+
 
 ---
 
