@@ -21,7 +21,11 @@ const CONTRACT_ADDRESS = deployment.address;
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://etherscope.vercel.app"],
+  })
+);
 
 // Connect to Sepolia via Alchemy for read operations.
 const alchemy = new Alchemy({
