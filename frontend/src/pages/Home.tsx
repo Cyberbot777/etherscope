@@ -26,7 +26,7 @@ export default function Home() {
         </p>
 
         <Link
-          to="/portfolio"
+          to="/wallet"
           className="bg-white/10 text-gray-200 px-5 py-2 text-sm rounded-full backdrop-blur-md hover:scale-105 hover:brightness-125 transition-all duration-200"
         >
           ↵ Enter
