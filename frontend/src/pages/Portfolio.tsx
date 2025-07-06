@@ -17,7 +17,6 @@ interface DepositData {
 
 export default function Portfolio() {
   const { address, isConnected } = useAccount();
-
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [transactions, setTransactions] = useState<TransactionData | null>(null);
   const [deposits, setDeposits] = useState<DepositData | null>(null);
