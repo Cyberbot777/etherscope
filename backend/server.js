@@ -9,7 +9,8 @@ const fs = require("fs");
 const path = require("path");
 
 // Load ABI and deployed contract address if you plan to use deposits.
-const abiPath = path.join(__dirname, "../artifacts/contracts/DepositWallet.sol/DepositWallet.json");
+const abiPath = path.join(__dirname, "./abi/DepositWallet.json");
+
 const contractJson = JSON.parse(fs.readFileSync(abiPath, "utf8"));
 const DepositWallet = contractJson;
 
@@ -25,7 +26,7 @@ app.use(cors());
 // Connect to Sepolia via Alchemy for read operations.
 const alchemy = new Alchemy({
   apiKey: process.env.ALCHEMY_API_KEY,
-  network: Network.ETH_SEPOLIA, 
+  network: Network.ETH_SEPOLIA,
 });
 
 // Use ethers.js for direct contract reads on Sepolia.
@@ -72,7 +73,11 @@ app.get("/api/transactions/:address", async (req, res) => {
 app.get("/api/deposits/:address", async (req, res) => {
   const { address } = req.params;
   try {
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, DepositWallet.abi, provider);
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      DepositWallet.abi,
+      provider
+    );
     const filter = contract.filters.Deposit();
     const latestBlock = await provider.getBlockNumber();
     const startBlock = Math.max(0, latestBlock - 5000); // Check only the last 5000 blocks
@@ -83,13 +88,17 @@ app.get("/api/deposits/:address", async (req, res) => {
 
     while (fromBlock <= latestBlock) {
       const toBlock = Math.min(fromBlock + batchSize - 1, latestBlock);
-      const batchEvents = await contract.queryFilter(filter, fromBlock, toBlock);
+      const batchEvents = await contract.queryFilter(
+        filter,
+        fromBlock,
+        toBlock
+      );
       allEvents = allEvents.concat(batchEvents);
       fromBlock = toBlock + 1;
     }
 
     const events = allEvents.filter(
-      event => event.args.from.toLowerCase() === address.toLowerCase()
+      (event) => event.args.from.toLowerCase() === address.toLowerCase()
     );
     res.json(events);
   } catch (error) {
