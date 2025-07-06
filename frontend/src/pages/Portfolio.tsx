@@ -18,7 +18,9 @@ interface DepositData {
 export default function Portfolio() {
   const { address, isConnected } = useAccount();
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
-  const [transactions, setTransactions] = useState<TransactionData | null>(null);
+  const [transactions, setTransactions] = useState<TransactionData | null>(
+    null
+  );
   const [deposits, setDeposits] = useState<DepositData | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -34,14 +36,15 @@ export default function Portfolio() {
 
     const fetchData = async () => {
       try {
-        const [portfolioData, transactionsData, depositsData] = await Promise.all([
-          getPortfolio(address),
-          getTransactions(address),
-          getDeposits(address),
-        ]);
-        setPortfolio(portfolioData);
-        setTransactions(transactionsData);
-        setDeposits(depositsData);
+        const [portfolioData, transactionsData, depositsData] =
+          await Promise.all([
+            getPortfolio(address),
+            getTransactions(address),
+            getDeposits(address),
+          ]);
+        setPortfolio(portfolioData as PortfolioData);
+        setTransactions(transactionsData as TransactionData);
+        setDeposits(depositsData as DepositData);
       } catch (error) {
         console.error("Error fetching data:", error);
         setPortfolio(null);
@@ -59,7 +62,9 @@ export default function Portfolio() {
     return (
       <PageWrapper>
         <h1 className="text-3xl font-bold">Portfolio Page</h1>
-        <p className="mt-4">Please connect your wallet to view portfolio data.</p>
+        <p className="mt-4">
+          Please connect your wallet to view portfolio data.
+        </p>
       </PageWrapper>
     );
   }
