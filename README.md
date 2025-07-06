@@ -1,10 +1,12 @@
-
 # EtherScope
 
 **A full-stack Web3 wallet portfolio dashboard for Ethereum (Sepolia testnet).**
 
 EtherScope lets you connect your wallet, view your ETH balance, recent transactions, and on-chain deposits using modern dApp tools.  
 Built with Solidity, Node.js (Express), React, and Tailwind CSS.
+
+**🔗 Live Demo:** [https://etherscope.vercel.app/](https://etherscope.vercel.app/)
+
 
 ---
 
