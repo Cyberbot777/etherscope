@@ -23,9 +23,10 @@ const PORT = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: ["https://etherscope.vercel.app"],
+    origin: ["https://etherscope.vercel.app", "http://localhost:5173"],
   })
 );
+
 
 // Connect to Sepolia via Alchemy for read operations.
 const alchemy = new Alchemy({
