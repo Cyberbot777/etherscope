@@ -13,14 +13,11 @@ contracts/node_modules/
 
 # General
 .env
-.DS_Store
-docker/.env
 
 
 # Node modules (global safety net)
 node_modules/
-package-lock.json
-package.json
+
 
 # Ignore IDE junk
 .vscode/
