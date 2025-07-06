@@ -18,29 +18,19 @@ export default function Navbar() {
         >
           {location.pathname === "/" ? "{Home}" : "Home"}
         </Link>
+
         <Link
-          to="/prompt"
+          to="/portfolio"
           className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200"
         >
-          {location.pathname === "/prompt" ? "{Prompt Lab}" : "Prompt Lab"}
+          {location.pathname === "/portfolio" ? "{Portfolio}" : "Portfolio"}
         </Link>
+
         <Link
-          to="/prompting101"
-          className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200"
-        >
-          {location.pathname === "/prompting101" ? "{Prompting 101}" : "Prompting 101"}
-        </Link>
-        <Link
-          to="/login"
+          to="/wallet"
           className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200 ml-auto"
         >
-          {location.pathname === "/login" ? "{Login}" : "Login"}
-        </Link>
-        <Link
-          to="/register"
-          className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200"
-        >
-          {location.pathname === "/register" ? "{Register}" : "Register"}
+          {location.pathname === "/wallet" ? "{Wallet}" : "Wallet"}
         </Link>
       </motion.div>
     </motion.nav>
