@@ -3,12 +3,24 @@ import { getPortfolio, getTransactions, getDeposits } from "../api/walletApi";
 import { useAccount } from "wagmi";
 import PageWrapper from "../components/PageWrapper";
 
+interface PortfolioData {
+  [key: string]: unknown;
+}
+
+interface TransactionData {
+  [key: string]: unknown;
+}
+
+interface DepositData {
+  [key: string]: unknown;
+}
+
 export default function Portfolio() {
   const { address, isConnected } = useAccount();
 
-  const [portfolio, setPortfolio] = useState(null);
-  const [transactions, setTransactions] = useState(null);
-  const [deposits, setDeposits] = useState(null);
+  const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
+  const [transactions, setTransactions] = useState<TransactionData | null>(null);
+  const [deposits, setDeposits] = useState<DepositData | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -26,13 +38,16 @@ export default function Portfolio() {
         const [portfolioData, transactionsData, depositsData] = await Promise.all([
           getPortfolio(address),
           getTransactions(address),
-          getDeposits(address)
+          getDeposits(address),
         ]);
         setPortfolio(portfolioData);
         setTransactions(transactionsData);
         setDeposits(depositsData);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Error fetching data:", error);
+        setPortfolio(null);
+        setTransactions(null);
+        setDeposits(null);
       } finally {
         setLoading(false);
       }
