@@ -11,8 +11,9 @@ It combines Solidity smart contracts, a Node.js backend, and a React frontend to
 - Wallet connection via **MetaMask** and **WalletConnect**.
 - Smart Contract for deposits and on-chain portfolio tracking.
 - Real-time token balances and transaction history via Web3 APIs.
-- Switch between **local blockchain** (Ganache) and **Ethereum testnets**.
-- Clean, responsive UI built with **React**, **Vite**, and **Tailwind CSS**.
+- Switch between **local blockchain** (Hardhat) and **Ethereum testnets**.
+- Clean, dark, and responsive UI built with **React**, **Vite**, and **Tailwind CSS**.
+- Integrated **portfolio dashboard** and **wallet monitoring** pages.
 - Fully Dockerized backend and local blockchain for easy development.
 
 ---
@@ -21,10 +22,10 @@ It combines Solidity smart contracts, a Node.js backend, and a React frontend to
 
 | Layer           | Tools / Technologies                          |
 | --------------- | --------------------------------------------- |
-| Smart Contracts | Solidity, Hardhat, Ganache (local blockchain) |
+| Smart Contracts | Solidity, Hardhat, Hardhat Node (local blockchain) |
 | Backend API     | Node.js, Ethers.js, Express, Docker           |
 | Frontend        | React, Vite, Tailwind CSS, Wagmi, RainbowKit  |
-| Blockchain APIs | Alchemy, Covalent, The Graph                  |
+| Blockchain APIs | Alchemy, Etherscan, The Graph                  |
 
 ---
 
@@ -33,6 +34,7 @@ It combines Solidity smart contracts, a Node.js backend, and a React frontend to
 - Full smart contract lifecycle: Write → Test → Deploy.
 - Wallet-based authentication (no passwords or centralized logins).
 - Real blockchain analysis and token portfolio visualization.
+- Modern navigation with **Home**, **Portfolio**, and **Wallet** pages.
 - Developer-friendly: easily toggle between local and testnet modes.
 - Dockerized backend and blockchain for consistent, reproducible development.
 
@@ -78,17 +80,19 @@ npx hardhat run scripts/sendDeposit.js --network localhost
 
 - `/api/block` → Latest block number.
 - `/api/block/:number` → Block details.
-- `/api/portfolio/:address` → ETH balance.
+- `/api/portfolio/:address` → ETH balance via Alchemy.
 - `/api/transactions/:address` → Transaction history via Etherscan.
 - `/api/deposits/:address` → Deposit events from the smart contract.
 
 ---
 
-## Tests
+## Screenshots
 
-Example smart contract test result (DepositWallet contract on local Ganache network):
-
+### Smart Contract Test Screenshot
 ![Smart Contract Test Screenshot](docs/successfull-test.png)
+
+### Frontend — Wallet Dashboard (React + Vite + Tailwind CSS)
+![Frontend Screenshot](docs/frontend.png)
 
 ---
 
@@ -102,3 +106,4 @@ Created and maintained by [Cyberbot777](https://github.com/Cyberbot777).
 
 - Always run backend from **inside** the `/backend` folder.
 - Do not run backend using `node backend/server.js` from root — run it after `cd backend`.
+- Frontend uses **Vite** for rapid development — run from `/frontend` directory.
