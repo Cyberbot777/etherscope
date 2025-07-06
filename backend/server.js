@@ -1,18 +1,18 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const { ethers } = require("ethers");
 const axios = require("axios");
 const { Alchemy, Network } = require("alchemy-sdk");
 const fs = require("fs");
 const path = require("path");
 
-// Load ABI
+// Load ABI and deployed contract address if you plan to use deposits.
 const abiPath = path.join(__dirname, "../artifacts/contracts/DepositWallet.sol/DepositWallet.json");
 const contractJson = JSON.parse(fs.readFileSync(abiPath, "utf8"));
 const DepositWallet = contractJson;
 
-// Load deployed address from deployment.json
 const deploymentPath = path.join(__dirname, "../deployment.json");
 const deployment = JSON.parse(fs.readFileSync(deploymentPath, "utf8"));
 const CONTRACT_ADDRESS = deployment.address;
@@ -20,42 +20,22 @@ const CONTRACT_ADDRESS = deployment.address;
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Connect to local Hardhat node
-const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545");
+app.use(cors());
 
-// Connect to Alchemy
+// Connect to Sepolia via Alchemy for read operations.
 const alchemy = new Alchemy({
   apiKey: process.env.ALCHEMY_API_KEY,
-  network: Network.ETH_MAINNET,
+  network: Network.ETH_SEPOLIA, 
 });
 
-// Get latest block number from local node
-app.get("/api/block", async (req, res) => {
-  try {
-    const blockNumber = await provider.getBlockNumber();
-    res.json({ blockNumber });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch block number" });
-  }
-});
+// Use ethers.js for direct contract reads on Sepolia.
+const provider = new ethers.JsonRpcProvider(
+  `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
+);
 
-// Get block details by block number
-app.get("/api/block/:number", async (req, res) => {
-  try {
-    const blockNumber = parseInt(req.params.number);
-    const block = await provider.getBlock(blockNumber);
-    res.json(block);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch block" });
-  }
-});
-
-// Get ETH balance via Alchemy
+// --- Portfolio Balance Endpoint ---
 app.get("/api/portfolio/:address", async (req, res) => {
   const { address } = req.params;
-
   try {
     const balance = await alchemy.core.getBalance(address);
     const ethBalance = ethers.formatEther(balance.toString());
@@ -66,12 +46,11 @@ app.get("/api/portfolio/:address", async (req, res) => {
   }
 });
 
-// Get transaction history via Etherscan
+// --- Transactions Endpoint (Etherscan API) ---
 app.get("/api/transactions/:address", async (req, res) => {
   const { address } = req.params;
-
   try {
-    const response = await axios.get("https://api.etherscan.io/api", {
+    const response = await axios.get("https://api-sepolia.etherscan.io/api", {
       params: {
         module: "account",
         action: "txlist",
@@ -82,7 +61,6 @@ app.get("/api/transactions/:address", async (req, res) => {
         apikey: process.env.ETHERSCAN_API_KEY,
       },
     });
-
     res.json(response.data);
   } catch (err) {
     console.error(err);
@@ -90,28 +68,29 @@ app.get("/api/transactions/:address", async (req, res) => {
   }
 });
 
-// Get deposit events from DepositWallet contract
+// --- Deposit Events (from contract, if deployed) ---
 app.get("/api/deposits/:address", async (req, res) => {
   const { address } = req.params;
-
   try {
     const contract = new ethers.Contract(CONTRACT_ADDRESS, DepositWallet.abi, provider);
-
     const filter = contract.filters.Deposit();
-    const allEvents = await contract.queryFilter(filter, 0, "latest");
-    const events = allEvents.filter(event => event.args.from.toLowerCase() === address.toLowerCase());
+    const latestBlock = await provider.getBlockNumber();
+    const startBlock = Math.max(0, latestBlock - 5000); // Check only the last 5000 blocks
 
-    console.log("\n=== All Events ===");
-    allEvents.forEach(event => {
-      console.log({
-        from: event.args.from,
-        amount: ethers.formatEther(event.args.amount.toString()) + " ETH",
-      });
-    });
+    let allEvents = [];
+    let fromBlock = startBlock;
+    const batchSize = 500;
 
-    console.log("\n=== Filtered Events ===");
-    console.log(events);
+    while (fromBlock <= latestBlock) {
+      const toBlock = Math.min(fromBlock + batchSize - 1, latestBlock);
+      const batchEvents = await contract.queryFilter(filter, fromBlock, toBlock);
+      allEvents = allEvents.concat(batchEvents);
+      fromBlock = toBlock + 1;
+    }
 
+    const events = allEvents.filter(
+      event => event.args.from.toLowerCase() === address.toLowerCase()
+    );
     res.json(events);
   } catch (error) {
     console.error(error);
@@ -119,7 +98,7 @@ app.get("/api/deposits/:address", async (req, res) => {
   }
 });
 
-// Start backend server
+// --- Start the backend server ---
 app.listen(PORT, () => {
   console.log(`Backend API running at http://localhost:${PORT}`);
 });

@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/portfolio", label: "Portfolio" },
+  { to: "/wallet", label: "Wallet" },
+];
+
 export default function Navbar() {
   const location = useLocation();
 
@@ -12,26 +18,17 @@ export default function Navbar() {
         transition={{ duration: 1.2, ease: [0.25, 0.8, 0.25, 1] }}
         className="flex gap-6 items-center"
       >
-        <Link
-          to="/"
-          className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200"
-        >
-          {location.pathname === "/" ? "{Home}" : "Home"}
-        </Link>
-
-        <Link
-          to="/portfolio"
-          className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200"
-        >
-          {location.pathname === "/portfolio" ? "{Portfolio}" : "Portfolio"}
-        </Link>
-
-        <Link
-          to="/wallet"
-          className="text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200 ml-auto"
-        >
-          {location.pathname === "/wallet" ? "{Wallet}" : "Wallet"}
-        </Link>
+        {navLinks.map(({ to, label }, idx) => (
+          <Link
+            key={to}
+            to={to}
+            className={`text-lg text-gray-300 hover:text-white hover:brightness-125 hover:scale-105 transition-all duration-200 ${
+              idx === navLinks.length - 1 ? "ml-auto" : ""
+            }`}
+          >
+            {location.pathname === to ? `{${label}}` : label}
+          </Link>
+        ))}
       </motion.div>
     </motion.nav>
   );

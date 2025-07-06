@@ -1,25 +1,23 @@
 const API_BASE_URL = "http://localhost:4000/api";
 
-export async function getPortfolio(address: string) {
-  const response = await fetch(`${API_BASE_URL}/portfolio/${address}`);
+// Generic fetch helper for all wallet endpoints
+async function fetchApi<T>(endpoint: string): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`);
   if (!response.ok) {
-    throw new Error("Failed to fetch portfolio data");
+    const message = await response.text();
+    throw new Error(`Error ${response.status}: ${message}`);
   }
   return response.json();
 }
 
-export async function getTransactions(address: string) {
-  const response = await fetch(`${API_BASE_URL}/transactions/${address}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch transactions");
-  }
-  return response.json();
+export function getPortfolio(address: string) {
+  return fetchApi(`/portfolio/${address}`);
 }
 
-export async function getDeposits(address: string) {
-  const response = await fetch(`${API_BASE_URL}/deposits/${address}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch deposits");
-  }
-  return response.json();
+export function getTransactions(address: string) {
+  return fetchApi(`/transactions/${address}`);
+}
+
+export function getDeposits(address: string) {
+  return fetchApi(`/deposits/${address}`);
 }

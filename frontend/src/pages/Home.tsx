@@ -11,7 +11,6 @@ export default function Home() {
         transition={{ duration: 1.2, ease: [0.25, 0.8, 0.25, 1] }}
         className="flex flex-col items-center justify-center text-center min-h-[70vh]"
       >
-        {/* Background Ethereum Logo */}
         <img
           src="/etth.png"
           alt="Ethereum Logo"
