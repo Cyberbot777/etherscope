@@ -1,18 +1,12 @@
-const { expect } = require("chai");
 const { ethers } = require("hardhat");
+const { expect } = require("chai");
 
 describe("DepositWallet", function () {
-  let depositWallet;
-  let owner;
-
-  beforeEach(async function () {
-    const DepositWallet = await ethers.getContractFactory("DepositWallet");
-    depositWallet = await DepositWallet.deploy();
-    await depositWallet.waitForDeployment();
-    [owner] = await ethers.getSigners();
-  });
-
   it("should accept ETH deposits", async function () {
+    const [owner] = await ethers.getSigners();
+    const DepositWallet = await ethers.getContractFactory("DepositWallet");
+    const depositWallet = await DepositWallet.deploy();
+
     const depositAmount = ethers.parseEther("1.0");
 
     const tx = await owner.sendTransaction({
@@ -22,7 +16,7 @@ describe("DepositWallet", function () {
 
     await tx.wait();
 
-    const balance = await ethers.provider.getBalance(depositWallet.target);
+    const balance = await depositWallet.getBalance();
     expect(balance).to.equal(depositAmount);
   });
 });

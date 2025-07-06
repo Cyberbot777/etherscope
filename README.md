@@ -38,32 +38,49 @@ It combines Solidity smart contracts, a Node.js backend, and a React frontend to
 
 ---
 
-## Dockerized Development Workflow
+## Development Workflow (Recommended, No Docker)
 
-### 1. Start Local Blockchain (Ganache)
-```
-docker compose up ganache
+### 1. Start Local Blockchain (Hardhat Node)
+
+```bash
+cd wallet-portfolio-dashboard
+npx hardhat node
 ```
 
-### 2. Build & Run Backend API
+### 2. Deploy Smart Contract (DepositWallet) to Local Node
+
+```bash
+npx hardhat run scripts/deploy.js --network localhost
 ```
+
+### 3. Run Backend API (Node.js)
+
+```bash
 cd backend
-docker build -t wallet-backend .
-docker run -p 4000:4000 wallet-backend
+node server.js
 ```
 
-### 3. Deploy Smart Contract (DepositWallet) to Ganache
-```
-cd contracts
-npx hardhat compile
-npx hardhat run scripts/deploy.js --network ganache
-```
+Your backend API will run at `http://localhost:4000`.
 
-### 4. Run Contract Tests
-```
-cd contracts
+### 4. Run Contract Tests (Optional)
+
+```bash
 npx hardhat test
 ```
+
+### 5. Send ETH to Contract (Example Script)
+
+```bash
+npx hardhat run scripts/sendDeposit.js --network localhost
+```
+
+### 6. API Endpoints
+
+- `/api/block` → Latest block number.
+- `/api/block/:number` → Block details.
+- `/api/portfolio/:address` → ETH balance.
+- `/api/transactions/:address` → Transaction history via Etherscan.
+- `/api/deposits/:address` → Deposit events from the smart contract.
 
 ---
 
@@ -73,9 +90,15 @@ Example smart contract test result (DepositWallet contract on local Ganache netw
 
 ![Smart Contract Test Screenshot](docs/successfull-test.png)
 
-
 ---
 
 ## Author
 
 Created and maintained by [Cyberbot777](https://github.com/Cyberbot777).
+
+---
+
+### Notes:
+
+- Always run backend from **inside** the `/backend` folder.
+- Do not run backend using `node backend/server.js` from root — run it after `cd backend`.
