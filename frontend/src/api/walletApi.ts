@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://localhost:4000/api";
+const API_BASE_URL = "https://etherscope.onrender.com/api";
+
 
 // Generic fetch helper for all wallet endpoints
 async function fetchApi<T>(endpoint: string): Promise<T> {
