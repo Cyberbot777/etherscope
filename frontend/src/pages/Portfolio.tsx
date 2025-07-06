@@ -42,7 +42,7 @@ export default function Portfolio() {
         setPortfolio(portfolioData);
         setTransactions(transactionsData);
         setDeposits(depositsData);
-      } catch (error: unknown) {
+      } catch (error) {
         console.error("Error fetching data:", error);
         setPortfolio(null);
         setTransactions(null);
