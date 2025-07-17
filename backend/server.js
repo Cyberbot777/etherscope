@@ -85,7 +85,7 @@ app.get("/api/deposits/:address", async (req, res) => {
     );
     const filter = contract.filters.Deposit();
     const latestBlock = await provider.getBlockNumber();
-    const startBlock = Math.max(0, latestBlock - 5000); // Check only the last 5000 blocks
+    const startBlock = Math.max(0, latestBlock - 5000);
 
     let allEvents = [];
     let fromBlock = startBlock;

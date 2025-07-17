@@ -26,7 +26,7 @@ export default function Navbar() {
               idx === navLinks.length - 1 ? "ml-auto" : ""
             }`}
           >
-            {location.pathname === to ? `{${label}}` : label}
+            {location.pathname === to ? `[${label}]` : label}
           </Link>
         ))}
       </motion.div>

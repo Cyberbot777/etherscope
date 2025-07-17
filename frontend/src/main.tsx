@@ -9,7 +9,6 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { mainnet, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-// Set up the Wagmi config using the modern v2 pattern:
 const config = createConfig({
   chains: [mainnet, sepolia],
   transports: {
@@ -18,7 +17,6 @@ const config = createConfig({
   },
 });
 
-// Set up React Query Client (required by Wagmi v2+)
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
